@@ -64,6 +64,7 @@ public class PassengerTravel implements Serializable{
         this.radius = radius;
     }
 
+    
     public String getParametersString() {
         String returnString = "passenger=" + getPassenger().getNickname();
         returnString += "&origin=";
@@ -77,8 +78,16 @@ public class PassengerTravel implements Serializable{
         return returnString;
     }
 
+    
 
-    private void readObject(final ObjectInputStream ois) throws IOException,
+    @Override
+	public String toString() {
+		return "PassengerTravel [id=" + id + ", passenger=" + passenger
+				+ ", origin=" + origin + ", destination=" + destination
+				+ ", radius=" + radius + "]";
+	}
+
+	private void readObject(final ObjectInputStream ois) throws IOException,
             ClassNotFoundException {
         this.id = ois.readInt();
         this.passenger = (User) ois.readObject();
@@ -95,8 +104,6 @@ public class PassengerTravel implements Serializable{
         oos.writeObject(this.destination);
         oos.writeInt(this.radius);
     }
-
-
 
 
 

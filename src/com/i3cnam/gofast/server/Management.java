@@ -100,13 +100,18 @@ public class Management {
 		cDao.update(course);
 	}
 	
-	public static void getTravel(int travelId) {
-		
+	public static List<Carpooling> getTravel(int travelId) {
+		TravelDAO tDao = new TravelDAO();
+		CarpoolDAO carpoolDao = new CarpoolDAO();
+		PassengerTravel travel= tDao.get(travelId);
+		return carpoolDao.getByTravel(travel);
 	}
 	
-	public static void getCourse(int courseId) {
-		
+	public static List<Carpooling> getCourse(int courseId) {
+		CourseDAO cDao = new CourseDAO();
+		CarpoolDAO carpoolDao = new CarpoolDAO();
+		DriverCourse course = cDao.get(courseId);
+		return carpoolDao.getByCourse(course, true);
 	}
 		
-	
 }

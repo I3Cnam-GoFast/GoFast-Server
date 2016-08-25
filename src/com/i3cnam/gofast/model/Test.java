@@ -3,14 +3,17 @@ package com.i3cnam.gofast.model;
 import java.util.List;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.i3cnam.gofast.dao.CarpoolDAO;
 import com.i3cnam.gofast.dao.CourseDAO;
 import com.i3cnam.gofast.dao.PlaceDAO;
+import com.i3cnam.gofast.dao.TravelDAO;
 import com.i3cnam.gofast.dao.UserDAO;
 
 public class Test {
 
 	public static void main(String[] args) {
 
+		/*
 		UserDAO uDao = new UserDAO();
 		User u;
 		u = uDao.get("titi42");
@@ -74,8 +77,19 @@ public class Test {
 		for (DriverCourse dc : results) {
 			System.out.println(dc);
 		}
-		
-		
+		*/
+		TravelDAO tDao = new TravelDAO();
+		CarpoolDAO cDao = new CarpoolDAO();
+		CourseDAO courseDao = new CourseDAO();
+
+		System.out.println("FOR TRAVEL 2");		
+		for (Carpooling c : cDao.getByTravel(tDao.get(2))) {
+			System.out.println(c);
+		}
+		System.out.println("FOR COURSE 7");
+		for (Carpooling c : cDao.getByCourse(courseDao.get(7),true)) {
+			System.out.println(c);
+		}
 		
 	}
 

@@ -197,6 +197,15 @@ public class Carpooling implements Serializable {
         oos.writeObject(this.state.name());
     }
 
+	@Override
+	public String toString() {
+		return "Carpooling [id=" + id + ", driverCourse=" + driverCourse
+				+ ", passengerTravel=" + passengerTravel + ", pickupPoint="
+				+ pickupPoint + ", dropoffPoint=" + dropoffPoint
+				+ ", pickupTime=" + pickupTime + ", fare=" + fare + ", state="
+				+ state + "]";
+	}
+
 
 
 }
