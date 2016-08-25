@@ -2,10 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/Nestor/eclipse_workspace/GoFast-Server/jars/classes.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Nestor/eclipse_workspace/GoFast-Server/jars/eclipselink.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Nestor/eclipse_workspace/GoFast-Server/jars/java-json.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Nestor/eclipse_workspace/GoFast-Server/jars/javax.persistence_2.1.0.v201304241213.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Nestor/eclipse_workspace/GoFast-Server/jars/mysql-connector-java-5.1.30-bin.jar"/>
+	<classpathentry kind="lib" path="jars/classes.jar"/>
+	<classpathentry kind="lib" path="jars/eclipselink.jar"/>
+	<classpathentry kind="lib" path="jars/java-json.jar"/>
+	<classpathentry kind="lib" path="jars/javax.persistence_2.1.0.v201304241213.jar"/>
+	<classpathentry kind="lib" path="jars/mysql-connector-java-5.1.30-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
