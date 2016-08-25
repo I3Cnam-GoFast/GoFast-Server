@@ -31,6 +31,7 @@ public class App extends NanoHTTPD {
         System.out.println(session.getUri());
         switch (session.getUri()) {
         case "/declare_course" :
+        	parms.get("driver");
         	parms.get("origin");
         	parms.get("destination");
         	parms.get("encoded_points");
@@ -38,12 +39,20 @@ public class App extends NanoHTTPD {
         			+ "\"course_id\":1"
         			+ "}";
         	break;
-        case "/find_matches" :
+        case "/declare_travel" :
+        	parms.get("passenger");
         	parms.get("origin");
         	parms.get("destination");
         	parms.get("radius");
+        	response = "{"
+        			+ "\"course_id\":2"
+        			+ "}";
+        	break;
+        case "/find_matches" :
+        	parms.get("travel_id");
         	response = "{\"matches\": ["
         			+ "{"
+        			+ "\"id\": \"1\","
         			+ "\"pickup_point\" : {"
         			+ "\"lat\":43.61,"
         			+ "\"long\":1.45"
@@ -53,9 +62,11 @@ public class App extends NanoHTTPD {
         			+ "\"long\":1.41"
         			+ "},"
         			+ "\"pickup_time\": \"08:51\","
+        			+ "\"fare\": \"3.25\","
         			+ "\"state\": \"POTENTIAL\""
         			+ "},"
         			+ "{"
+        			+ "\"id\": \"2\","
         			+ "\"pickup_point\" : {"
         			+ "\"lat\":43.62,"
         			+ "\"long\":1.46"
@@ -65,9 +76,11 @@ public class App extends NanoHTTPD {
         			+ "\"long\":1.42"
         			+ "},"
         			+ "\"pickup_time\": \"08:52\", "
+        			+ "\"fare\": \"3.30\","
         			+ "\"state\": \"POTENTIAL\""
         			+ "},"
         			+ "{"
+        			+ "\"id\": \"3\","
         			+ "\"pickup_point\" : {"
         			+ "\"lat\":43.63,"
         			+ "\"long\":1.47"
@@ -77,6 +90,7 @@ public class App extends NanoHTTPD {
         			+ "\"long\":1.40"
         			+ "},"
         			+ "\"pickup_time\": \"08:53\", "
+        			+ "\"fare\": \"3.50\","
         			+ "\"state\": \"POTENTIAL\""
         			+ "}"
         			+ "]}";
@@ -84,7 +98,16 @@ public class App extends NanoHTTPD {
         case "/request_carpooling" :
         	parms.get("carpool_id");
         	break;
+        case "/cancel_request" :
+        	parms.get("carpool_id");
+        	break;
         case "/accept_carpooling" :
+        	parms.get("carpool_id");
+        	break;
+        case "/refuse_carpooling" :
+        	parms.get("carpool_id");
+        	break;
+        case "/abort_carpooling" :
         	parms.get("carpool_id");
         	break;
         case "/update_position" :
@@ -96,9 +119,70 @@ public class App extends NanoHTTPD {
         	parms.get("new_position");
         	parms.get("new_encoded_points");
         	break;
-        case "/get_carpooling" :
-        	parms.get("course");
-        	parms.get("travel");
+        case "/get_travel" :
+        	parms.get("travel_id");
+        	response = "{\"matches\": ["
+        			+ "{"
+        			+ "\"id\": \"1\","
+        			+ "\"pickup_point\" : {"
+        			+ "\"lat\":43.61,"
+        			+ "\"long\":1.45"
+        			+ "},"
+        			+ "\"dropoff_point\" : {"
+        			+ "\"lat\":43.65,"
+        			+ "\"long\":1.41"
+        			+ "},"
+        			+ "\"pickup_time\": \"08:52\","
+        			+ "\"fare\": \"3.25\","
+        			+ "\"state\": \"POTENTIAL\""
+        			+ "},"
+        			+ "{"
+        			+ "\"id\": \"2\","
+        			+ "\"pickup_point\" : {"
+        			+ "\"lat\":43.62,"
+        			+ "\"long\":1.46"
+        			+ "},"
+        			+ "\"dropoff_point\" : {"
+        			+ "\"lat\":43.66,"
+        			+ "\"long\":1.42"
+        			+ "},"
+        			+ "\"pickup_time\": \"08:54\", "
+        			+ "\"fare\": \"3.30\","
+        			+ "\"state\": \"POTENTIAL\""
+        			+ "},"
+        			+ "{"
+        			+ "\"id\": \"3\","
+        			+ "\"pickup_point\" : {"
+        			+ "\"lat\":43.63,"
+        			+ "\"long\":1.47"
+        			+ "},"
+        			+ "\"dropoff_point\" : {"
+        			+ "\"lat\":43.64,"
+        			+ "\"long\":1.40"
+        			+ "},"
+        			+ "\"pickup_time\": \"08:53\", "
+        			+ "\"fare\": \"3.50\","
+        			+ "\"state\": \"POTENTIAL\""
+        			+ "}"
+        			+ "]}";
+        	break;
+        case "/get_course" :
+        	parms.get("course_id");
+        	response = "{\"matches\": ["
+        			+ "{"
+        			+ "\"id\": \"1\","
+        			+ "\"pickup_point\" : {"
+        			+ "\"lat\":43.61,"
+        			+ "\"long\":1.45"
+        			+ "},"
+        			+ "\"dropoff_point\" : {"
+        			+ "\"lat\":43.65,"
+        			+ "\"long\":1.41"
+        			+ "},"
+        			+ "\"pickup_time\": \"08:52\","
+        			+ "\"fare\": \"3.25\","
+        			+ "\"state\": \"REQUESTED\""
+        			+ "}]}";
         	break;
         default: 
         	response = "bad request";
