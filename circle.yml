@@ -1,9 +1,3 @@
-deployment:
-  staging:
-    branch: master
-    commands:
-      - ./deploy_staging.sh
-
 machine:
   java:
     version: oraclejdk8
