@@ -33,10 +33,13 @@ public class App extends NanoHTTPD {
     }
 
     public Response serve(IHTTPSession session) {
-        String msg = "<html><h1>Nuxlight-Server</h1></html>";
+    	// TODO faire des services pour supprimer les objets de la base de données:
+    	// - Un covoiturage a pris fin (valider fin trajet)
+    	// - Le conducteur arrive à destination sans avoir pris de passager
+    	// - Le passager ne trouve pas de covoiturages disponibles
+    	// - ?
         Map<String, String> parms = session.getParms();	
-        msg = msg+parms.toString();
-        msg += session.getUri();
+
         String response = "";
         System.out.println(session.getUri());
         switch (session.getUri()) {
@@ -83,7 +86,12 @@ public class App extends NanoHTTPD {
         return newFixedLengthResponse(response);
     }
     
-    
+    /**
+     * constructs one course object with the parameters passed as parameter
+     * and save it in the database
+     * @param parms
+     * @return a json string with the course_id 
+     */
     private String declareCourse(Map<String, String> parms){
 
     	// create course object
@@ -116,7 +124,13 @@ public class App extends NanoHTTPD {
     			+ "}";
     }
     
-    
+
+    /**
+     * constructs one travel object with the values passed as parameter
+     * and save it in the database
+     * @param parms
+     * @return a json string with the course_id 
+     */
     private String declareTravel(Map<String, String> parms) {
 
     	parms.get("passenger");

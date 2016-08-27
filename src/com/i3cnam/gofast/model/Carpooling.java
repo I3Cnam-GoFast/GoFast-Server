@@ -16,7 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * Created by Nestor on 18/07/2016.
+ * IThis class represents a carpool shared between one driver and one passenger
  */
 @Entity
 public class Carpooling implements Serializable {

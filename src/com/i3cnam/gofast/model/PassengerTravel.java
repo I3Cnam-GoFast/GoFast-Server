@@ -13,7 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * Created by Nestor on 18/07/2016.
+ * Reresents one travel made by a passenger, 
+ * it can be associated to one carpool
  */
 @Entity
 public class PassengerTravel implements Serializable{
@@ -64,7 +65,10 @@ public class PassengerTravel implements Serializable{
         this.radius = radius;
     }
 
-    
+    /**
+     * prepares the parameters string to insert into url like : par1=val1&par2=val2 ...
+     * @return parameters string 
+     */
     public String getParametersString() {
         String returnString = "passenger=" + getPassenger().getNickname();
         returnString += "&origin=";
@@ -96,7 +100,7 @@ public class PassengerTravel implements Serializable{
         this.radius = ois.readInt();
 
     }
-
+	
     private void writeObject(final ObjectOutputStream oos) throws IOException {
         oos.writeInt(this.id);
         oos.writeObject(this.passenger);

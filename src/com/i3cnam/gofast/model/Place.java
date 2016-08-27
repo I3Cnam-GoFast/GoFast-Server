@@ -12,14 +12,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 /**
- * Created by Nestor on 16/07/2016.
+ * It represents a physical place caracterised by its coordinates, one name and one id;
+ * This class uses Google maps API to retrieve the information of a given gps point
  */
 @Entity
 public class Place implements Serializable{
-    private String placeName;
-	private LatLng coordinates;
+	private LatLng coordinates; // the geographical coordinates of the place
+    private String placeName; // the name of the place as it appears in google maps
 	@Id 
-    private String placeId;    
+    private String placeId; // the id as it appears in google maps
     
     public Place() {
 		super();

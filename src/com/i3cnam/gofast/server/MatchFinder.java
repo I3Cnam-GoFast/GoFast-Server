@@ -12,6 +12,10 @@ import com.i3cnam.gofast.model.Carpooling;
 import com.i3cnam.gofast.model.DriverCourse;
 import com.i3cnam.gofast.model.PassengerTravel;
 
+
+/**
+ * @author Nestor
+ */
 public class MatchFinder {
 	private PassengerTravel travel;
 
@@ -23,6 +27,14 @@ public class MatchFinder {
 
 	/**
 	 * Returns a list of the potential carpoolings for the travel with the courses existing in database
+	 * 
+	 * PROCEDURE:
+	 * - Select into database, the courses whose limits include those from the travel
+	 * - Search for each course, one pickup point and one dropoff point which satisfy
+	 * the origin and the destination of the passenger and the radius of the travel
+	 * - If the two point are found, create a Carpool object which includes: the pickup point,
+	 * the dropoff point, the pickup time and the fare, and the state POTENTIAL
+	 * 
 	 * @return the list of the potential carpoolings 
 	 */
 	// for each current course into the zone:

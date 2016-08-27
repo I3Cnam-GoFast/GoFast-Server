@@ -26,7 +26,8 @@ import javax.persistence.Transient;
 import systr.cartographie.Operations;
 
 /**
- * Created by Nestor on 18/07/2016.
+ * Represents one course made by a driver, 
+ * it can be associated to one or more carpools
  */
 @Entity @Access(AccessType.FIELD)
 public class DriverCourse implements Serializable{
@@ -111,7 +112,10 @@ public class DriverCourse implements Serializable{
     public void setActualPosition(LatLng actualPosition) {
         this.actualPosition = actualPosition;
     }
-    
+
+    /**
+     * deletes the gps points of the path previous to the actual position
+     */
     public void updatePath() {
     	List<LatLng> actualPath = getPath();
     	int segment = getSegment(actualPosition);
@@ -122,6 +126,11 @@ public class DriverCourse implements Serializable{
         encodedPoints = PolyUtil.encode(actualPath);
     }
     
+    /**
+     * finds the nearest point of the path to the point given as parameter
+     * @param lookupPoint
+     * @return the nearest point of the path
+     */
     public LatLng getNearestPoint(LatLng lookupPoint) {
     	List<LatLng> actualPath = getPath();
     	int i = 0, nearestSegment = 0;
@@ -148,6 +157,11 @@ public class DriverCourse implements Serializable{
         return nearestPoint;
     }
     
+    /**
+     * returns the segment (index) where the point passed as parameter belong 
+     * @param point
+     * @return
+     */
     public int getSegment(LatLng point) {
     	if (lastComputedPoint != null) {
         	if (point.equals(lastComputedPoint)) {
@@ -166,10 +180,18 @@ public class DriverCourse implements Serializable{
         this.positioningTime = positionningTime;
     }
 
+    /**
+     * decodes the ecoded points string and returns a list of the gps points
+     * @return
+     */
     public List<LatLng> getPath() {
         return PolyUtil.decode(encodedPoints);
     }
 
+    /**
+     * returns true if the north south east and west bounds are defined
+     * @return 
+     */
     public boolean boundsDefined() {
     	return (northest != 0 || southest != 0 || eastest != 0 || westest!= 0);
     }
@@ -195,7 +217,10 @@ public class DriverCourse implements Serializable{
 //        return new LatLngBounds(new LatLng(northest,westest),new LatLng(southest,eastest));
     }    
     
-    
+    /**
+     * prepares the parameters string to insert into url like : par1=val1&par2=val2 ...
+     * @return parameters string 
+     */    
     public String getParametersString() {
         String returnString = "driver=" + getDriver().getNickname();
         returnString += "&origin=";
