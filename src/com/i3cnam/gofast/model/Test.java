@@ -8,6 +8,7 @@ import com.i3cnam.gofast.dao.CourseDAO;
 import com.i3cnam.gofast.dao.PlaceDAO;
 import com.i3cnam.gofast.dao.TravelDAO;
 import com.i3cnam.gofast.dao.UserDAO;
+import com.i3cnam.gofast.server.Management;
 
 public class Test {
 
@@ -90,6 +91,13 @@ public class Test {
 		for (Carpooling c : cDao.getByCourse(courseDao.get(7),true)) {
 			System.out.println(c);
 		}
+		
+		System.out.println("NEW Match Find");
+		Management.findMatches(2);
+		for (Carpooling c : cDao.getByTravel(tDao.get(2))) {
+			System.out.println(c);
+		}
+		
 		
 	}
 

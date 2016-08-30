@@ -10,6 +10,7 @@ import com.i3cnam.gofast.model.Carpooling;
 import com.i3cnam.gofast.model.Carpooling.CarpoolingState;
 import com.i3cnam.gofast.model.DriverCourse;
 import com.i3cnam.gofast.model.PassengerTravel;
+import com.i3cnam.gofast.model.User;
 
 /**
  * Class with static methods to perform operation of the lifecycle of the object of the database
@@ -41,6 +42,26 @@ public class Management {
 	}
 	
 	/**
+	 * Search the current course for the driver in the database and return the object
+	 * @param driver
+	 * @return
+	 */
+	public static DriverCourse getCourseByDriver(User driver) {
+		CourseDAO cDao = new CourseDAO();
+		return cDao.getByUser(driver);
+	}
+	
+	/**
+	 * Search the current travel for the passenger in the database and return the object
+	 * @param driver
+	 * @return
+	 */
+	public static PassengerTravel getTravelByPassenger(User driver) {
+		TravelDAO tDao = new TravelDAO();
+		return tDao.getByUser(driver);
+	}
+	
+	/**
 	 * Search the possible carpools for the travel given id
 	 * It insert the matches into the database (carpool table)
 	 * @param travelId
@@ -56,10 +77,14 @@ public class Management {
 		MatchFinder matcher = new MatchFinder(travel);
 		List<Carpooling> matches = matcher.findMatches();
 		// save potential carpoolings into database
+		cDao.removePotentialsByTravel(travel);
 		for (Carpooling carpool : matches) {
 	    	System.out.println("Insert to DB ");
-			cDao.create(carpool);
-	    	System.out.println(carpool.getId());
+	    	// if not exists in db 
+	    	if (cDao.getByTravelAndDriver(carpool.getDriver(), travel).size() == 0) {
+	    		cDao.create(carpool);
+		    	System.out.println(carpool.getId());
+	    	}
 		}
 		return matches;
 	}
@@ -133,6 +158,29 @@ public class Management {
 			cDao.update(carpooling);
 		}		
 	}
+	
+	/**
+	 * Remove one course and all the associated carpoolings
+	 * (The IN_DEMAND carpools pass to state CONFLICT)
+	 * @param course
+	 */
+	public static void abortCourse(DriverCourse course) {
+		CarpoolDAO cDao = new CarpoolDAO(); 
+		CourseDAO dcDao = new CourseDAO();
+		cDao.removePotentialsByCourse(course);
+		System.out.println("Potentials deleted");
+		for (Carpooling courseCarpool : cDao.getByCourse(course, true)) {
+			if(courseCarpool.getState() != CarpoolingState.IN_DEMAND) {
+				System.out.println("State changed");
+				courseCarpool.setState(CarpoolingState.CONFLICT);
+				cDao.update(courseCarpool);
+			}
+		}
+		System.out.println("remov");
+		dcDao.remove(course);
+		System.out.println("end");
+	}
+
 
 	/**
 	 * Update the actual position of the course and update the path

@@ -11,8 +11,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.i3cnam.gofast.model.Carpooling;
 import com.i3cnam.gofast.model.DriverCourse;
 import com.i3cnam.gofast.model.Place;
+import com.i3cnam.gofast.model.User;
 
 //@Stateless
 public class CourseDAO {
@@ -38,13 +40,10 @@ public class CourseDAO {
 		try {
 			getEntityManager().getTransaction().begin();
 			
-	    	System.out.println("s 1");
-      	
+
 			// if they dont exist in database, persist origin and / or destination objects
 			if (getEntityManager().find(Place.class, course.getOrigin().getPlaceId()) == null) {
-		    	System.out.println("s 2");
 				getEntityManager().persist(course.getOrigin());
-		    	System.out.println("s 3");
 			}
 			if (getEntityManager().find(Place.class, course.getDestination().getPlaceId()) == null) {
 				getEntityManager().persist(course.getDestination());
@@ -71,11 +70,40 @@ public class CourseDAO {
 			throw new DAOException( e );
 		}
 	}
-	
+
 	public DriverCourse get(int id) {
 		return getEntityManager().find(DriverCourse.class, id);
 	}
+	
+	
+	public void remove(DriverCourse course) {
+		try {
+		getEntityManager().getTransaction().begin();
+		if (!getEntityManager().contains(course)) {
+			course = getEntityManager().merge(course);
+		}
+		getEntityManager().remove(course);
+		getEntityManager().getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
+	public DriverCourse getByUser(User user){
+		DriverCourse course;
+		try {
+			Query	 query = getEntityManager().createQuery("SELECT c FROM DriverCourse c WHERE c.driver=:requesteduser");
+	        query.setParameter( "requesteduser" , user);
+	        course = (DriverCourse) query.getSingleResult();
+
+	      } catch ( javax.persistence.NonUniqueResultException | javax.persistence.NoResultException e ) {
+	          course = null;
+	      } catch ( Exception e ) {
+	          throw new DAOException( e );
+	      }
+		return course;
+	}
+	
 	
 	public List<DriverCourse> getAll() {
 		List<DriverCourse> allCourses = new ArrayList<>();

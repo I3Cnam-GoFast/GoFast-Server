@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +24,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONString;
 
 import systr.cartographie.Operations;
 
@@ -233,6 +239,25 @@ public class DriverCourse implements Serializable{
         return returnString;
     }
 
+    public JSONObject getJsonObject() {
+    	JSONObject json = new JSONObject();
+        DateFormat format = new SimpleDateFormat("y/M/d H:m");
+
+    	try {
+			json.put("id", this.id);
+			json.put("origin", this.origin.getJsonObject());
+			json.put("destination", this.destination.getJsonObject());
+			json.put("encoded_points", this.encodedPoints);
+			json.put("actual_position", (this.actualPosition == null ? null : this.actualPosition.getJsonObject()));
+			json.put("positioning_time", (this.actualPosition == null ? null : format.format(this.positioningTime)));
+			json.put("driver", this.driver.getJsonObject());
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	
+    	return json;
+    }
     
 
     @Override

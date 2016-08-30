@@ -14,6 +14,7 @@ import com.i3cnam.gofast.model.Carpooling;
 import com.i3cnam.gofast.model.DriverCourse;
 import com.i3cnam.gofast.model.PassengerTravel;
 import com.i3cnam.gofast.model.Carpooling.CarpoolingState;
+import com.i3cnam.gofast.model.User;
 
 //@Stateless
 public class CarpoolDAO {
@@ -103,4 +104,48 @@ public class CarpoolDAO {
 		return courseCarpoolings;
 	}
 
+	public void removePotentialsByTravel(PassengerTravel travel) {
+		try {
+			Query query = getEntityManager().createQuery("DELETE FROM Carpooling c WHERE c.passengerTravel=:requestedtravel AND c.state=:potentialstate");
+	        query.setParameter( "requestedtravel" , travel);
+	        query.setParameter( "potentialstate" , CarpoolingState.POTENTIAL);
+			getEntityManager().getTransaction().begin();            	
+	        query.executeUpdate();
+			getEntityManager().getTransaction().commit();
+		} catch ( Exception e ) {
+			throw new DAOException( e );
+		}
+	}
+
+
+	public void removePotentialsByCourse(DriverCourse course) {
+		try {
+			Query query = getEntityManager().createQuery("DELETE FROM Carpooling c WHERE c.driverCourse=:requestedcourse AND c.state=:potentialstate");
+	        query.setParameter( "requestedcourse" , course);
+	        query.setParameter( "potentialstate" , CarpoolingState.POTENTIAL);
+			getEntityManager().getTransaction().begin();            	
+	        query.executeUpdate();
+			getEntityManager().getTransaction().commit();
+		} catch ( Exception e ) {
+			throw new DAOException( e );
+		}
+	}
+
+
+	public List<Carpooling> getByTravelAndDriver(User driver, PassengerTravel travel) {
+		List<Carpooling> carpoolings = new ArrayList<>();
+		try {
+			Query query = getEntityManager().createQuery("SELECT c FROM Carpooling c WHERE c.passengerTravel=:requestedtravel AND c.driverCourse.driver=:requesteddriver");
+	        query.setParameter( "requestedtravel" , travel);
+	        query.setParameter( "requesteddriver" , driver);
+			carpoolings = (List<Carpooling>) query.getResultList();			
+		} catch ( Exception e ) {
+			throw new DAOException( e );
+		}
+		System.out.println(driver);
+		System.out.println(travel);
+		System.out.println(carpoolings.size());
+		return carpoolings;
+	}
+	
 }

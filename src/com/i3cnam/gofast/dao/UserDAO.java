@@ -49,8 +49,13 @@ public class UserDAO {
 
 	public User getByPhone(String phone) {
 		User user;
-		Query query = getEntityManager().createQuery("SELECT u FROM User u WHERE u.phonenumber = '" + phone + "'");
-		user = (User) query.getSingleResult();
+		try {
+			Query query = getEntityManager().createQuery("SELECT u FROM User u WHERE u.phoneNumber = '" + phone + "'");
+			user = (User) query.getSingleResult();
+		} catch ( javax.persistence.NoResultException e ) {
+			user = null;
+		}
+
 		return user;
 	}
 	

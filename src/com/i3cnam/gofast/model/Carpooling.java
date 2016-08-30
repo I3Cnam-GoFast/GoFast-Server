@@ -15,6 +15,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * IThis class represents a carpool shared between one driver and one passenger
  */
@@ -107,26 +110,26 @@ public class Carpooling implements Serializable {
         return getPassengerTravel().getPassenger();
     }
 
-    public String toJsonString() {
+    
+
+    public JSONObject getJsonObject() {
+    	JSONObject json = new JSONObject();
         DateFormat format = new SimpleDateFormat("y/M/d H:m");
 
-        return "{"
-    			+ "\"id\": " + this.id + ","
-    			+ "\"pickup_point\" : {"
-    			+ "\"lat\":" + this.pickupPoint.latitude + ","
-    			+ "\"long\":" + this.pickupPoint.longitude
-    			+ "},"
-    			+ "\"dropoff_point\" : {"
-    			+ "\"lat\":" + this.dropoffPoint.longitude + ","
-    			+ "\"long\":" + this.dropoffPoint.longitude
-    			+ "},"
-    			+ "\"pickup_time\": \"" + format.format(this.pickupTime) + "\", "
-    			+ "\"fare\": \"" + this.fare + "\","
-    			+ "\"state\": \"" + this.state.name() + "\""
-    			+ "}";
-
+    	try {
+			json.put("id", this.id);
+			json.put("pickup_point", this.pickupPoint);
+			json.put("dropoff_point", this.dropoffPoint);
+			json.put("pickup_time", (this.pickupTime == null ? null : format.format(this.pickupTime)));
+			json.put("fare", this.fare);
+			json.put("state", this.state.name());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	
+    	return json;
     }
-    
+        
     
     @Override
     public boolean equals(Object obj) {

@@ -6,11 +6,16 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Reresents one travel made by a passenger, 
@@ -80,6 +85,24 @@ public class PassengerTravel implements Serializable{
         returnString += "&radius=";
         returnString += Integer.toString(radius);
         return returnString;
+    }
+
+    public JSONObject getJsonObject() {
+    	JSONObject json = new JSONObject();
+        DateFormat format = new SimpleDateFormat("y/M/d H:m");
+
+    	try {
+			json.put("id", this.id);
+			json.put("origin", this.origin.getJsonObject());
+			json.put("destination", this.destination.getJsonObject());
+			json.put("radius", this.radius);
+			json.put("passenger", this.passenger);
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	
+    	return json;
     }
 
     

@@ -11,6 +11,9 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * It represents a physical place caracterised by its coordinates, one name and one id;
  * This class uses Google maps API to retrieve the information of a given gps point
@@ -81,6 +84,20 @@ public class Place implements Serializable{
         this.placeId = placeId;
     }
 
+    
+    public JSONObject getJsonObject() {
+    	JSONObject json = new JSONObject();
+    	try {
+			json.put("place_name", this.placeName);
+			json.put("place_id", this.placeId);
+			json.put("lat", this.coordinates.latitude);
+			json.put("long", this.coordinates.longitude);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	return json;
+    }
+    
     @Override
     public String toString() {
         return "Place[place_name=" + this.placeName +

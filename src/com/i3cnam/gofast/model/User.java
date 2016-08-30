@@ -8,6 +8,9 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Nestor on 18/07/2016.
  */
@@ -40,6 +43,18 @@ public class User implements Serializable{
         return me;
     }
 
+    public JSONObject getJsonObject() {
+    	JSONObject json = new JSONObject();
+    	try {
+			json.put("nickname", this.nickname);
+			json.put("phone_number", this.phoneNumber);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	return json;
+
+    }
+    
 
     private void readObject(final ObjectInputStream ois) throws IOException,
             ClassNotFoundException {
