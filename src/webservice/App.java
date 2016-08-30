@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.i3cnam.gofast.dao.CourseDAO;
+import com.i3cnam.gofast.dao.TravelDAO;
 import com.i3cnam.gofast.dao.UserDAO;
 import com.i3cnam.gofast.model.Carpooling;
 import com.i3cnam.gofast.model.DriverCourse;
@@ -98,6 +99,9 @@ public class App extends NanoHTTPD {
         	break;
         case "/abort_course" :
         	abortCourse(parms);
+        	break;
+        case "/abort_travel" :
+        	abortTravel(parms);
         	break;
         default: 
         	response = "bad request";
@@ -348,12 +352,19 @@ public class App extends NanoHTTPD {
     			new LatLng(lat,lng), 
     			parms.get("new_encoded_points"));
     }
-    
+
     private void abortCourse(Map<String, String> parms) {
     	CourseDAO cDao = new CourseDAO();
     	DriverCourse course = cDao.get(Integer.parseInt(parms.get("course_id")));
     	System.out.println(course);
     	Management.abortCourse(course);
+    }
+
+    private void abortTravel(Map<String, String> parms) {
+    	TravelDAO tDao = new TravelDAO();
+    	PassengerTravel travel = tDao.get(Integer.parseInt(parms.get("travel_id")));
+    	System.out.println(travel);
+    	Management.abortTravel(travel);
     }
     
     private String getCourse(Map<String, String> parms) {

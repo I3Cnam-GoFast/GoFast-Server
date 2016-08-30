@@ -60,6 +60,19 @@ public class TravelDAO {
 	}
 
 
+	public void remove(PassengerTravel travel) {
+		try {
+		getEntityManager().getTransaction().begin();
+		if (!getEntityManager().contains(travel)) {
+			travel = getEntityManager().merge(travel);
+		}
+		getEntityManager().remove(travel);
+		getEntityManager().getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public PassengerTravel getByUser(User user){
 		PassengerTravel travel;
 		try {

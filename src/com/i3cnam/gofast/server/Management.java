@@ -158,7 +158,7 @@ public class Management {
 			cDao.update(carpooling);
 		}		
 	}
-	
+
 	/**
 	 * Remove one course and all the associated carpoolings
 	 * (The IN_DEMAND carpools pass to state CONFLICT)
@@ -178,6 +178,28 @@ public class Management {
 		}
 		System.out.println("remov");
 		dcDao.remove(course);
+		System.out.println("end");
+	}
+
+	/**
+	 * Remove one travel and all the associated carpoolings
+	 * (The IN_DEMAND carpools pass to state CONFLICT)
+	 * @param travel
+	 */
+	public static void abortTravel(PassengerTravel travel) {
+		CarpoolDAO cDao = new CarpoolDAO(); 
+		TravelDAO tDao = new TravelDAO();
+		cDao.removePotentialsByTravel(travel);
+		System.out.println("Potentials deleted");
+		for (Carpooling courseCarpool : cDao.getByTravel(travel)) {
+			if(courseCarpool.getState() != CarpoolingState.IN_DEMAND) {
+				System.out.println("State changed");
+				courseCarpool.setState(CarpoolingState.CONFLICT);
+				cDao.update(courseCarpool);
+			}
+		}
+		System.out.println("remov");
+		tDao.remove(travel);
 		System.out.println("end");
 	}
 
