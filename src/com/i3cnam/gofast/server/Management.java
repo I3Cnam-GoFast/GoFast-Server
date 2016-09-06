@@ -199,9 +199,10 @@ public class Management {
 	 * (The IN_PROGRESS carpools pass to state CONFLICT)
 	 * @param course
 	 */
-	public static void abortCourse(DriverCourse course) {
+	public static void abortCourse(int courseId) {
 		CarpoolDAO cDao = new CarpoolDAO(); 
 		CourseDAO dcDao = new CourseDAO();
+		DriverCourse course = dcDao.get(courseId);
 		cDao.removeStateByCourse(course, CarpoolingState.POTENTIAL);
 		System.out.println("Potentials deleted");
 		cDao.removeStateByCourse(course, CarpoolingState.IN_DEMAND);
@@ -228,13 +229,13 @@ public class Management {
 	 * (The IN_PROGRESS carpools pass to state CONFLICT)
 	 * @param travel
 	 */
-	public static void abortTravel(PassengerTravel travel) {
+	public static void abortTravel(int travelId) {
 		CarpoolDAO cDao = new CarpoolDAO(); 
 		TravelDAO tDao = new TravelDAO();
+		PassengerTravel travel = tDao.get(travelId);
 		cDao.removeByTravelWithState(travel, CarpoolingState.POTENTIAL);
 		cDao.removeByTravelWithState(travel, CarpoolingState.IN_DEMAND);
 		cDao.removeByTravelWithState(travel, CarpoolingState.REFUSED);
-		System.out.println("Potentials deleted");
 		for (Carpooling courseCarpool : cDao.getByTravel(travel)) {
 			if(courseCarpool.getState() != CarpoolingState.IN_PROGRESS) {
 				System.out.println("State changed");
