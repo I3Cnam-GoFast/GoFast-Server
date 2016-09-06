@@ -30,6 +30,7 @@ public class PassengerTravel implements Serializable{
     private Place origin; // initial position of the passenger
     private Place destination; // place where the passenger wants to go to
     private int radius = 500; // distance that the passenger accepts to walk to the pickup and dropoff points
+    public boolean obsolete = false; // it passes to true when the travel is finished
 
     /*
     GETTERS AND SETTERS ----------------------------------------------------------------------------
@@ -69,8 +70,16 @@ public class PassengerTravel implements Serializable{
     public void setRadius(int radius) {
         this.radius = radius;
     }
+        
+    public boolean isObsolete() {
+		return obsolete;
+	}
 
-    /**
+	public void setObsolete(boolean obsolete) {
+		this.obsolete = obsolete;
+	}
+
+	/**
      * prepares the parameters string to insert into url like : par1=val1&par2=val2 ...
      * @return parameters string 
      */

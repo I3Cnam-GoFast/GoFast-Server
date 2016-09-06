@@ -39,7 +39,10 @@ public class Carpooling implements Serializable {
     private float fare; // amount of money to be applied to the carpooling
 
     private CarpoolingState state = CarpoolingState.POTENTIAL; // state of carpool
-
+    
+    private boolean validatedByDriver = false; // complement of state
+    private boolean validatedByPassenger = false; // complement of state
+        
 
     /* --------------------------- GETTERS AND SETTERS --------------------------- */
     public int getId() { return id; }
@@ -86,10 +89,6 @@ public class Carpooling implements Serializable {
         this.pickupTime = pickupTime;
     }
 
-    public CarpoolingState getState() {
-        return state;
-    }
-
     public float getFare() {
         return fare;
     }
@@ -98,8 +97,28 @@ public class Carpooling implements Serializable {
         this.fare = fare;
     }
 
+    public CarpoolingState getState() {
+        return state;
+    }
+
     public void setState(CarpoolingState state) {
         this.state = state;
+    }
+
+    public boolean isValidatedByDriver() {
+    	return validatedByDriver;
+    }
+
+    public void setValidatedByDriver(boolean validatedByDriver) {
+    	this.validatedByDriver = validatedByDriver;
+    }
+
+    public boolean isValidatedByPassenger() {
+    	return validatedByPassenger;
+    }
+
+    public void setValidatedByPassenger(boolean validatedByPassenger) {
+    	this.validatedByPassenger = validatedByPassenger;
     }
 
     public User getDriver() {
@@ -109,8 +128,6 @@ public class Carpooling implements Serializable {
     public User getPassenger() {
         return getPassengerTravel().getPassenger();
     }
-
-    
 
     public JSONObject getJsonObject() {
     	JSONObject json = new JSONObject();

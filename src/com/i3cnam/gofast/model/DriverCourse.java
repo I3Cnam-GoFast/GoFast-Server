@@ -50,7 +50,8 @@ public class DriverCourse implements Serializable{
     private String encodedPoints; // encoded gps points of path
     private LatLng actualPosition; // actual position of the driver
     private Date positioningTime; // last time when the position was updated
-
+    private boolean obsolete; // passes to true when the course is finished
+    
     // calculated bounds of the path
     private double northest = 0;
     private double southest = 0;
@@ -119,6 +120,14 @@ public class DriverCourse implements Serializable{
         this.actualPosition = actualPosition;
     }
 
+	public boolean isObsolete() {
+		return obsolete;
+	}
+	
+	public void setObsolete(boolean obsolete) {
+		this.obsolete = obsolete;
+	}    
+	
     /**
      * deletes the gps points of the path previous to the actual position
      */
