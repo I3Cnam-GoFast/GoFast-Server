@@ -10,7 +10,6 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import com.i3cnam.gofast.model.DriverCourse;
 import com.i3cnam.gofast.model.PassengerTravel;
 import com.i3cnam.gofast.model.Place;
 import com.i3cnam.gofast.model.User;

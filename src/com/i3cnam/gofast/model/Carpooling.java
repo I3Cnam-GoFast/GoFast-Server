@@ -118,10 +118,12 @@ public class Carpooling implements Serializable {
 
     	try {
 			json.put("id", this.id);
-			json.put("pickup_point", this.pickupPoint);
-			json.put("dropoff_point", this.dropoffPoint);
+			json.put("pickup_point", this.pickupPoint.getJsonObject());
+			json.put("dropoff_point", this.dropoffPoint.getJsonObject());
 			json.put("pickup_time", (this.pickupTime == null ? null : format.format(this.pickupTime)));
 			json.put("fare", this.fare);
+			json.put("passenger", this.passengerTravel.getPassenger().getNickname());
+			json.put("driver", this.driverCourse.getDriver().getNickname());
 			json.put("state", this.state.name());
 		} catch (JSONException e) {
 			e.printStackTrace();

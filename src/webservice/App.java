@@ -85,6 +85,9 @@ public class App extends NanoHTTPD {
         case "/abort_carpooling" :
         	abortCarpooling(parms);
         	break;
+        case "/validate_end_carpooling" :
+        	validateEndCarpooling(parms);
+        	break;
         case "/update_position" :
         	updatePosition(parms);
         	break;
@@ -296,7 +299,7 @@ public class App extends NanoHTTPD {
     	if (user == null) {return "{\"ERROR\": \"The user is not registered in GoFast\"}";}
     	DriverCourse course = Management.getCourseByDriver(user);
     	if (course == null) {return "{\"ERROR\": \"The are no course for this user\"}";}
-         
+         System.out.println(course);
     	return course.getJsonObject().toString();
     }
     
@@ -334,6 +337,10 @@ public class App extends NanoHTTPD {
     	Management.abortCarpooling(Integer.parseInt(parms.get("carpool_id")));
     }
 
+    private void validateEndCarpooling(Map<String, String> parms) {
+    	Management.validateEndCarpooling(Integer.parseInt(parms.get("carpool_id")));
+    }
+    
     private void updatePosition(Map<String, String> parms) {
     	String[] coordinatesArr = parms.get("new_position").split(",");
     	double lat = Double.parseDouble(coordinatesArr[0]);
@@ -386,8 +393,10 @@ public class App extends NanoHTTPD {
     	JSONArray array = new JSONArray();
     	
     	for (Carpooling carpooling : carpoolings) {
-    		// add carpool json string
-    		array.put(carpooling.getJsonObject());
+    		if (carpooling.getId() != 0) {
+	    		// add carpool json string
+	    		array.put(carpooling.getJsonObject());
+    		}
     	}
 
     	try {

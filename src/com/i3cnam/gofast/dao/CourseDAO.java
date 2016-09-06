@@ -91,11 +91,16 @@ public class CourseDAO {
 
 	public DriverCourse getByUser(User user){
 		DriverCourse course;
+		System.out.println(user);
 		try {
 			Query	 query = getEntityManager().createQuery("SELECT c FROM DriverCourse c WHERE c.driver=:requesteduser");
 	        query.setParameter( "requesteduser" , user);
+			System.out.println("Query bound");
 	        course = (DriverCourse) query.getSingleResult();
+			System.out.println("Result OK");
+			System.out.println(course);
 
+			
 	      } catch ( javax.persistence.NonUniqueResultException | javax.persistence.NoResultException e ) {
 	          course = null;
 	      } catch ( Exception e ) {

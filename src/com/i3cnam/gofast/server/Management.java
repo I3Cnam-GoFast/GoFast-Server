@@ -77,7 +77,7 @@ public class Management {
 		MatchFinder matcher = new MatchFinder(travel);
 		List<Carpooling> matches = matcher.findMatches();
 		// save potential carpoolings into database
-		cDao.removePotentialsByTravel(travel);
+		cDao.removeByTravelWithState(travel, CarpoolingState.POTENTIAL);
 		for (Carpooling carpool : matches) {
 	    	System.out.println("Insert to DB ");
 	    	// if not exists in db 
@@ -97,8 +97,10 @@ public class Management {
 	public static void requestCarpooling(int carpoolId) {
 		CarpoolDAO cDao = new CarpoolDAO();
 		Carpooling carpooling = cDao.get(carpoolId);
+		System.out.println(carpooling);
 		if (carpooling.getState() == CarpoolingState.POTENTIAL) {
 			carpooling.setState(CarpoolingState.IN_DEMAND);
+			System.out.println(carpooling);
 			cDao.update(carpooling);
 		}
 	}
@@ -120,15 +122,23 @@ public class Management {
 	/**
 	 * It changes the state of a carpooling from IN_DEMAND to IN_PROGRESS
 	 * (If the previous stat is not IN_DEMAND, nothng is done)
+	 * Remove all other carpooling of the travel (POTENTIAL and IN_DEMAND)
 	 * @param carpoolId
 	 */
-	public static void acceptCarpooling(int carpoolId) {
+	public static boolean acceptCarpooling(int carpoolId) {
 		CarpoolDAO cDao = new CarpoolDAO();
 		Carpooling carpooling = cDao.get(carpoolId);
 		if (carpooling.getState() == CarpoolingState.IN_DEMAND) {
+			// change state of carpooling and save it into the database
 			carpooling.setState(CarpoolingState.IN_PROGRESS);
 			cDao.update(carpooling);
-		}		
+			// remove all other carpooling of the travel from the database
+			cDao.removeByTravelWithState(carpooling.getPassengerTravel(), CarpoolingState.POTENTIAL);
+			cDao.removeByTravelWithState(carpooling.getPassengerTravel(), CarpoolingState.IN_DEMAND);
+			// keep other states (could be CONFLICT)
+			return true;
+		}
+		else return false;
 	}
 	
 	/**
@@ -156,12 +166,26 @@ public class Management {
 		if (carpooling.getState() == CarpoolingState.IN_PROGRESS) {
 			carpooling.setState(CarpoolingState.CONFLICT);
 			cDao.update(carpooling);
-		}		
+		}
+	}
+	
+	/**
+	 * It changes the state of a carpooling from IN_PROGRESS to CONFLICT
+	 * (If the previous stat is not CONFLICT, nothng is done)
+	 * @param carpoolId
+	 */
+	public static void validateEndCarpooling(int carpoolId) {
+		CarpoolDAO cDao = new CarpoolDAO();
+		Carpooling carpooling = cDao.get(carpoolId);
+		if (carpooling.getState() == CarpoolingState.IN_PROGRESS) {
+			carpooling.setState(CarpoolingState.ACHIEVED);
+			cDao.update(carpooling);
+		}
 	}
 
 	/**
 	 * Remove one course and all the associated carpoolings
-	 * (The IN_DEMAND carpools pass to state CONFLICT)
+	 * (The IN_PROGRESS carpools pass to state CONFLICT)
 	 * @param course
 	 */
 	public static void abortCourse(DriverCourse course) {
@@ -170,7 +194,7 @@ public class Management {
 		cDao.removePotentialsByCourse(course);
 		System.out.println("Potentials deleted");
 		for (Carpooling courseCarpool : cDao.getByCourse(course, true)) {
-			if(courseCarpool.getState() != CarpoolingState.IN_DEMAND) {
+			if(courseCarpool.getState() != CarpoolingState.IN_PROGRESS) {
 				System.out.println("State changed");
 				courseCarpool.setState(CarpoolingState.CONFLICT);
 				cDao.update(courseCarpool);
@@ -183,16 +207,17 @@ public class Management {
 
 	/**
 	 * Remove one travel and all the associated carpoolings
-	 * (The IN_DEMAND carpools pass to state CONFLICT)
+	 * (The IN_PROGRESS carpools pass to state CONFLICT)
 	 * @param travel
 	 */
 	public static void abortTravel(PassengerTravel travel) {
 		CarpoolDAO cDao = new CarpoolDAO(); 
 		TravelDAO tDao = new TravelDAO();
-		cDao.removePotentialsByTravel(travel);
+		cDao.removeByTravelWithState(travel, CarpoolingState.POTENTIAL);
+		cDao.removeByTravelWithState(travel, CarpoolingState.IN_DEMAND);
 		System.out.println("Potentials deleted");
 		for (Carpooling courseCarpool : cDao.getByTravel(travel)) {
-			if(courseCarpool.getState() != CarpoolingState.IN_DEMAND) {
+			if(courseCarpool.getState() != CarpoolingState.IN_PROGRESS) {
 				System.out.println("State changed");
 				courseCarpool.setState(CarpoolingState.CONFLICT);
 				cDao.update(courseCarpool);

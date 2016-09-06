@@ -249,13 +249,12 @@ public class DriverCourse implements Serializable{
 			json.put("destination", this.destination.getJsonObject());
 			json.put("encoded_points", this.encodedPoints);
 			json.put("actual_position", (this.actualPosition == null ? null : this.actualPosition.getJsonObject()));
-			json.put("positioning_time", (this.actualPosition == null ? null : format.format(this.positioningTime)));
+			json.put("positioning_time", (this.positioningTime == null ? null : format.format(this.positioningTime)));
 			json.put("driver", this.driver.getJsonObject());
 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-    	
     	return json;
     }
     

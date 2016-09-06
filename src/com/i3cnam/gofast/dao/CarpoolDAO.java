@@ -54,6 +54,7 @@ public class CarpoolDAO {
 			getEntityManager().persist( carpooling );
 			getEntityManager().getTransaction().commit();
 		} catch ( Exception e ) {
+			System.out.println("ERROR");
 			throw new DAOException( e );
 		}
 	}
@@ -104,11 +105,12 @@ public class CarpoolDAO {
 		return courseCarpoolings;
 	}
 
-	public void removePotentialsByTravel(PassengerTravel travel) {
+
+	public void removeByTravelWithState(PassengerTravel travel, CarpoolingState state) {
 		try {
 			Query query = getEntityManager().createQuery("DELETE FROM Carpooling c WHERE c.passengerTravel=:requestedtravel AND c.state=:potentialstate");
 	        query.setParameter( "requestedtravel" , travel);
-	        query.setParameter( "potentialstate" , CarpoolingState.POTENTIAL);
+	        query.setParameter( "potentialstate" , state);
 			getEntityManager().getTransaction().begin();            	
 	        query.executeUpdate();
 			getEntityManager().getTransaction().commit();
