@@ -120,11 +120,12 @@ public class CarpoolDAO {
 	}
 
 
-	public void removePotentialsByCourse(DriverCourse course) {
+
+	public void removeStateByCourse(DriverCourse course, CarpoolingState state) {
 		try {
-			Query query = getEntityManager().createQuery("DELETE FROM Carpooling c WHERE c.driverCourse=:requestedcourse AND c.state=:potentialstate");
+			Query query = getEntityManager().createQuery("DELETE FROM Carpooling c WHERE c.driverCourse=:requestedcourse AND c.state=:requestedstate");
 	        query.setParameter( "requestedcourse" , course);
-	        query.setParameter( "potentialstate" , CarpoolingState.POTENTIAL);
+	        query.setParameter( "requestedstate" , state);
 			getEntityManager().getTransaction().begin();            	
 	        query.executeUpdate();
 			getEntityManager().getTransaction().commit();

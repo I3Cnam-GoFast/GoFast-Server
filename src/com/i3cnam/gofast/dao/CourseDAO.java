@@ -93,7 +93,7 @@ public class CourseDAO {
 		DriverCourse course;
 		System.out.println(user);
 		try {
-			Query	 query = getEntityManager().createQuery("SELECT c FROM DriverCourse c WHERE c.driver=:requesteduser");
+			Query	 query = getEntityManager().createQuery("SELECT c FROM DriverCourse c WHERE c.driver=:requesteduser AND NOT c.obsolete");
 	        query.setParameter( "requesteduser" , user);
 			System.out.println("Query bound");
 	        course = (DriverCourse) query.getSingleResult();

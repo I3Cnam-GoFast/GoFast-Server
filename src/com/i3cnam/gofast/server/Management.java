@@ -174,11 +174,22 @@ public class Management {
 	 * (If the previous stat is not CONFLICT, nothng is done)
 	 * @param carpoolId
 	 */
-	public static void validateEndCarpooling(int carpoolId) {
+	public static void validateEndCarpooling(int carpoolId, String role) {
 		CarpoolDAO cDao = new CarpoolDAO();
 		Carpooling carpooling = cDao.get(carpoolId);
+		boolean changeState = false;
 		if (carpooling.getState() == CarpoolingState.IN_PROGRESS) {
-			carpooling.setState(CarpoolingState.ACHIEVED);
+			if (role.equals("driver")) {
+				carpooling.setValidatedByDriver(true);
+				changeState = carpooling.isValidatedByPassenger();
+			}
+			else if (role.equals("passenger")) {
+				carpooling.setValidatedByPassenger(true);
+				changeState = carpooling.isValidatedByDriver();
+			}
+			if (changeState) {
+				carpooling.setState(CarpoolingState.ACHIEVED);
+			}
 			cDao.update(carpooling);
 		}
 	}
@@ -191,8 +202,14 @@ public class Management {
 	public static void abortCourse(DriverCourse course) {
 		CarpoolDAO cDao = new CarpoolDAO(); 
 		CourseDAO dcDao = new CourseDAO();
-		cDao.removePotentialsByCourse(course);
+		cDao.removeStateByCourse(course, CarpoolingState.POTENTIAL);
 		System.out.println("Potentials deleted");
+		cDao.removeStateByCourse(course, CarpoolingState.IN_DEMAND);
+		System.out.println("Requested deleted");
+		cDao.removeStateByCourse(course, CarpoolingState.REFUSED);
+		System.out.println("Refused deleted");
+		// WE KEEP ONLY COnFLICT and ACHIEVED (for historical purposes)
+		// Passes IN_PROGRESS to CONFLICT
 		for (Carpooling courseCarpool : cDao.getByCourse(course, true)) {
 			if(courseCarpool.getState() != CarpoolingState.IN_PROGRESS) {
 				System.out.println("State changed");
@@ -200,8 +217,9 @@ public class Management {
 				cDao.update(courseCarpool);
 			}
 		}
+		course.setObsolete(true);
 		System.out.println("remov");
-		dcDao.remove(course);
+		dcDao.update(course);
 		System.out.println("end");
 	}
 
@@ -215,6 +233,7 @@ public class Management {
 		TravelDAO tDao = new TravelDAO();
 		cDao.removeByTravelWithState(travel, CarpoolingState.POTENTIAL);
 		cDao.removeByTravelWithState(travel, CarpoolingState.IN_DEMAND);
+		cDao.removeByTravelWithState(travel, CarpoolingState.REFUSED);
 		System.out.println("Potentials deleted");
 		for (Carpooling courseCarpool : cDao.getByTravel(travel)) {
 			if(courseCarpool.getState() != CarpoolingState.IN_PROGRESS) {
@@ -223,8 +242,9 @@ public class Management {
 				cDao.update(courseCarpool);
 			}
 		}
+		travel.setObsolete(true);
 		System.out.println("remov");
-		tDao.remove(travel);
+		tDao.update(travel);
 		System.out.println("end");
 	}
 

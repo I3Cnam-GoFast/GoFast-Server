@@ -338,7 +338,7 @@ public class App extends NanoHTTPD {
     }
 
     private void validateEndCarpooling(Map<String, String> parms) {
-    	Management.validateEndCarpooling(Integer.parseInt(parms.get("carpool_id")));
+    	Management.validateEndCarpooling(Integer.parseInt(parms.get("carpool_id")),parms.get("role"));
     }
     
     private void updatePosition(Map<String, String> parms) {

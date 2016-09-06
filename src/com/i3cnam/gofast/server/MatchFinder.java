@@ -59,14 +59,17 @@ public class MatchFinder {
 		for (DriverCourse oneCourse : possibleCoursesForCarpooling) {
 	    	System.out.println("Looking : " + oneCourse.getId());
 
+	    	System.out.println("s 1 ");
 			// extract path from encoded points
 			List<LatLng> actualPath = oneCourse.getPath();
+	    	System.out.println("s 2 ");
 	        i = 0;
 	        distanceToPickup = 100000; // unlikely distance (100km)
 	        distanceToDropoff = 100000; // unlikely distance (100km)
 			// browse path
 			// search origin
 	        while (i < (actualPath.size() - 1)) {
+		    	System.out.println("Point : " + i);
 	            // calculate nearest point from the passenger origin to this segment and the distance to this point
 	        	nearestSegmentPoint = Operations.nearestPoint(actualPath.get(i), actualPath.get(i + 1),  travel.getOrigin().getCoordinates());
 	        	distanceToNeasrestSegmentPoint = Operations.dist2PointsEnM(travel.getOrigin().getCoordinates(), nearestSegmentPoint);

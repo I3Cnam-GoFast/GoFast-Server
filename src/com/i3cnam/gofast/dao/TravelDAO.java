@@ -10,6 +10,7 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import com.i3cnam.gofast.model.DriverCourse;
 import com.i3cnam.gofast.model.PassengerTravel;
 import com.i3cnam.gofast.model.Place;
 import com.i3cnam.gofast.model.User;
@@ -59,6 +60,17 @@ public class TravelDAO {
 	}
 
 
+	public void update( PassengerTravel travel ) throws DAOException {
+		try {
+			getEntityManager().getTransaction().begin();
+			getEntityManager().persist( travel );
+			getEntityManager().getTransaction().commit();
+		} catch ( Exception e ) {
+			throw new DAOException( e );
+		}
+	}
+
+
 	public void remove(PassengerTravel travel) {
 		try {
 		getEntityManager().getTransaction().begin();
@@ -75,7 +87,7 @@ public class TravelDAO {
 	public PassengerTravel getByUser(User user){
 		PassengerTravel travel;
 		try {
-			Query	 query = getEntityManager().createQuery("SELECT t FROM PassengerTravel t WHERE t.passenger=:requesteduser");
+			Query	 query = getEntityManager().createQuery("SELECT t FROM PassengerTravel t WHERE t.passenger=:requesteduser AND NOT t.obsolete");
 	        query.setParameter( "requesteduser" , user);
 	        travel = (PassengerTravel) query.getSingleResult();
 		} catch ( javax.persistence.NoResultException e ) {

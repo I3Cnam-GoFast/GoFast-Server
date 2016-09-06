@@ -200,6 +200,7 @@ public class DriverCourse implements Serializable{
      * @return
      */
     public List<LatLng> getPath() {
+    	System.out.println(encodedPoints);
         return PolyUtil.decode(encodedPoints);
     }
 
