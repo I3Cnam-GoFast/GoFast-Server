@@ -149,7 +149,8 @@ public class CourseDAO {
 		// init return variable
 		List<DriverCourse> courses = new ArrayList<>();
 		try {
-			Query query = getEntityManager().createQuery("SELECT c FROM DriverCourse c WHERE c.northest > " + northest + 
+			Query query = getEntityManager().createQuery("SELECT c FROM DriverCourse c WHERE NOT c.obsolete" +
+															" AND c.northest > " + northest + 
 															" AND c.southest < " + southest +
 															" AND c.westest > " + westest +
 															" AND c.eastest < " + eastest	);

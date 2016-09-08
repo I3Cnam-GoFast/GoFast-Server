@@ -197,7 +197,7 @@ public class App extends NanoHTTPD {
 		}
 		return json.toString();
 
-    }    
+    }
     
     /**
      * constructs one course object with the parameters passed as parameter
@@ -227,6 +227,9 @@ public class App extends NanoHTTPD {
     	lng = Double.parseDouble(coordinatesArr[1]);
     	course.setDestination(new Place(new LatLng(lat,lng)));
     	System.out.println(course.getDestination());
+    	
+    	// set the actual position equal to the origin
+    	course.setActualPosition(course.getOrigin().getCoordinates());
     	
     	// set encoded points to the object
     	course.setEncodedPoints(parms.get("encoded_points"));
